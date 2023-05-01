@@ -15,4 +15,4 @@ cd \<this-repo\>\
 source .rc\
 cuda-compile \<some-cuda-file.cu\>\
 chmod +x \<some-cuda-file\>\
-./\<some-cuda-file\>\
+./\<some-cuda-file\>
