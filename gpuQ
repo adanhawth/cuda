@@ -1,0 +1,15 @@
+###
+#
+#	Provides periodic system resource monitoring of CUDA GPUs
+#
+watch -n 0.3 '
+    nvidia-smi | tail -n10
+    echo -e "\n"
+    nvidia-smi --format=csv --query-gpu=power.draw,utilization.gpu,fan.speed,temperature.gpu
+    echo -e "\n"
+    if [ `lsof -n -w -t /dev/nvidia*` -ne 0 ]; then
+        ps f -o user,pgrp,pid,pcpu,pmem,start,time,command -p `lsof -n -w -t /dev/nvidia*`
+    else
+        echo "*** No current GPU related processes running on CPU(s) ***"
+    fi  2>/dev/null
+'
