@@ -1,12 +1,33 @@
 /*
+ *
+ *	Modified cuda-samples::deviceQuery (Copyright (c) 2022, NVIDIA CORPORATION. All rights reserved.)
+ *
  *	Returns the abbreviated property's list for all CUDA devices.
+ *
  */
 
 #include <stdio.h>
 
 int main() {
     int nDevices;
-    cudaGetDeviceCount(&nDevices);
+
+	cudaError_t error_id = cudaGetDeviceCount(&nDevices);
+
+	if (error_id != cudaSuccess) {
+	  printf("cudaGetDeviceCount returned %d\n-> %s\n",
+			 static_cast<int>(error_id), cudaGetErrorString(error_id));
+	  printf("Result = FAIL\n");
+	  exit(EXIT_FAILURE);
+	}
+
+	// This function call returns 0 if there are no CUDA capable devices.
+	if (nDevices == 0) {
+	  printf("There are no available device(s) that support CUDA\n");
+	} else {
+	  printf("Detected %d CUDA Capable device(s)\n", nDevices);
+	}
+
+	printf("\nNumber of devices: %ld\n\n", nDevices);
 
     printf("\nnvcc (CUDA toolkit) version: %d.%d.%d\n", __CUDACC_VER_MAJOR__, __CUDACC_VER_MINOR__, __CUDACC_VER_BUILD__);
 
